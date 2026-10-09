@@ -9,27 +9,47 @@ export class VetorIngressos {
     }
 
     public localizar(codigo: string): number {
-        for (let i = 0; i < this.ingressos.length; i++) {
+        let posicao: number=-1;
+        let i: number = 0;
+        while (i < this.ingressos.length && posicao === -1) {
             if (this.ingressos[i].getCodigo() === codigo) {
-                return i;
+                posicao = i;
             }
+            i++;            
         }
-        return -1;
+        return posicao;
     }
 
     public adicionar(ingresso: Ingresso): boolean {
-        if (this.localizar(ingresso.getCodigo()) !== -1) {
-            return false;
+        let posicao: number;
+        let resultado : boolean = false;
+        posicao = this.localizar(ingresso.getCodigo());
+        if (posicao === -1) {
+             this.ingressos.push(ingresso);
+             resultado = true;
         }
-        this.ingressos.push(ingresso);
-        return true;
+        return resultado;
+    }           
+    
+    public listar(): string {
+        let resultado: string;
+        if (this.ingressos.length === 0) {
+            resultado = "Nenhum ingresso cadastrado.";
+        } else {
+            resultado = "";
+            for (const ingresso of this.ingressos) {
+                resultado += ingresso.exibirDados() + "\n";
+            }
+        }
+        return resultado;
     }
 
-    public listar(): string {
-        if (this.ingressos.length === 0) {
-            return "Nenhum ingresso cadastrado.";
-        }
+    public listarTodos(): string {
         let resultado = "";
+        if (this.ingressos.length === 0) {
+            resultado = "Nenhum ingresso cadastrado.";
+        }
+        resultado = "";
         for (const ingresso of this.ingressos) {
             resultado += ingresso.exibirDados() + "\n";
         }
@@ -38,43 +58,43 @@ export class VetorIngressos {
 
     public remover(codigo: string): boolean {
         const posicao = this.localizar(codigo);
+        let removido: boolean = false;
         if (posicao !== -1) {
             this.ingressos.splice(posicao, 1);
-            return true;
+            removido = true;
         }
-        return false;
+        return removido;
     }
 
     public alterarValor(codigo: string, valor: number): boolean {
         const posicao = this.localizar(codigo);
+        let alterado: boolean = false;
         if (posicao !== -1) {
             this.ingressos[posicao].setValor(valor);
-            return true;
+            alterado = true;
         }
-        return false;
+        return alterado;
     }
 
     public alterarValorAdicional(codigo: string, valorAdicional: number): boolean {
         let posicao: number;
         let alterado: boolean = false;
-
         posicao = this.localizar(codigo);
-
         if (posicao !== -1 && this.ingressos[posicao] instanceof IngressoVIP) {
             let ingresso_vip: IngressoVIP;
             ingresso_vip = this.ingressos[posicao] as IngressoVIP;
             ingresso_vip.setValorAdicional(valorAdicional);
             alterado = true;
         }
-
         return alterado;
     }
 
     public obterIngresso(codigo: string): Ingresso | null {
         const posicao = this.localizar(codigo);
+        let resultado: Ingresso | null = null;
         if (posicao !== -1) {
-            return this.ingressos[posicao];
+            resultado = this.ingressos[posicao];
         }
-        return null;
+        return resultado;
     }
 }

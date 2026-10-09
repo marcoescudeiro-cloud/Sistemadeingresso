@@ -17,10 +17,14 @@ export class IngressoVIP extends Ingresso {
     }
 
     public calcularValor(): number {
-        return this.getValor() + this.valorAdicional;
+        let total: number;
+        total = this.getValor() + this.valorAdicional;
+        return total;
     }
 
     public override exibirDados(): string {
-        return `Código: ${this.getCodigo()} | Evento: ${this.getNomeEvento()} | Valor Original: R$ ${this.getValor().toFixed(2)} | Valor Adicional: R$ ${this.valorAdicional.toFixed(2)} | Valor Total: R$ ${this.calcularValor().toFixed(2)}`;
+        let resultado: string;
+        resultado = `Código: ${this.getCodigo()} | Evento: ${this.getNomeEvento()} | Valor Original: R$ ${this.getValor().toFixed(2)} | Valor Adicional: R$ ${this.valorAdicional.toFixed(2)} | Valor Total: R$ ${this.calcularValor().toFixed(2)}`;
+        return resultado;
     }
 }
