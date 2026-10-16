@@ -1,5 +1,5 @@
 export class Ingresso {
-    private codigo: string;
+    protected codigo: string;
     private valor: number;
     private nomeEvento: string;
 
@@ -9,23 +9,23 @@ export class Ingresso {
         this.nomeEvento = nomeEvento;
     }
 
-    public getCodigo(): string {
+    getCodigo(): string {
         return this.codigo;
     }
 
-    public getValor(): number {
+    getValor(): number {
         return this.valor;
     }
 
-    public getNomeEvento(): string {
+    getNomeEvento(): string {
         return this.nomeEvento;
     }
 
-    public setValor(valor: number): void {
+    setValor(valor: number): void {
         this.valor = valor;
     }
 
-    public exibirDados(): string {
+    exibirDados(): string {
         return `Código: ${this.codigo} | Evento: ${this.nomeEvento} | Valor: R$ ${this.valor.toFixed(2)}`;
     }
 }

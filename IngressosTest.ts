@@ -1,114 +1,96 @@
-import * as readline from "readline-sync";
 import { Ingresso } from "./Ingresso";
 import { IngressoVIP } from "./IngressoVIP";
 import { VetorIngressos } from "./VetorIngressos";
 
 export class IngressosTest {
-    public static main(): void {
-        const gestor = new VetorIngressos();
-        let opcao: number = 0;
+    static main(): void {
+        let vetor: VetorIngressos;
+        let opcao: number;
+        let codigo: string;
+        let nome_evento: string;
+        let valor: number;
+        let valor_adicional: number;
+        let ingresso: Ingresso;
+        let ingresso_vip: IngressoVIP;
+        let lista: string;
 
-        do {
-            console.log("\n================ MENU DE OPÇÕES ================");
-            console.log("1. Cadastrar ingresso comum");
-            console.log("2. Cadastrar ingresso VIP");
-            console.log("3. Apresentar os dados de um ingresso");
-            console.log("4. Apresentar os dados de todos os ingressos cadastrados");
-            console.log("5. Alterar o valor de um ingresso");
-            console.log("6. Alterar o valor adicional de um ingresso VIP");
-            console.log("7. Remover um ingresso");
-            console.log("8. Encerrar o programa");
-            console.log("=================================================");
+        vetor = new VetorIngressos();
+        opcao = 0;
 
-            opcao = readline.questionInt("Escolha uma opcao: ");
+        while (opcao != 8) {
+            opcao = Number(prompt(
+                "===== SISTEMA DE INGRESSOS =====\n" +
+                "1. Cadastrar ingresso comum\n" +
+                "2. Cadastrar ingresso VIP\n" +
+                "3. Apresentar os dados de um ingresso\n" +
+                "4. Apresentar os dados de todos os ingressos\n" +
+                "5. Alterar o valor de um ingresso\n" +
+                "6. Alterar o valor adicional de um ingresso VIP\n" +
+                "7. Remover um ingresso\n" +
+                "8. Encerrar o programa"
+            ));
 
-            switch (opcao) {
-                case 1: {
-                    const codigo = readline.question("Codigo do ingresso: ");
-                    const evento = readline.question("Nome do evento: ");
-                    const valor = readline.questionFloat("Valor do ingresso: ");
-
-                    const novoIngresso = new Ingresso(codigo, valor, evento);
-                    if (gestor.adicionar(novoIngresso)) {
-                        console.log("Ingresso comum cadastrado com sucesso!");
-                    } else {
-                        console.log("Erro: Ja existe um ingresso com esse codigo.");
-                    }
-                    break;
+            if (opcao == 1) {
+                codigo = prompt("Código do ingresso:")!;
+                nome_evento = prompt("Nome do evento:")!;
+                valor = Number(prompt("Valor do ingresso:"));
+                ingresso = new Ingresso(codigo, valor, nome_evento);
+                if (vetor.adicionar(ingresso)) {
+                    alert("Ingresso cadastrado!");
+                } else {
+                    alert("Já existe um ingresso com esse código.");
                 }
-                case 2: {
-                    const codigo = readline.question("Codigo do ingresso: ");
-                    const evento = readline.question("Nome do evento: ");
-                    const valor = readline.questionFloat("Valor base do ingresso: ");
-                    const valorAdicional = readline.questionFloat("Valor adicional VIP: ");
-
-                    const novoIngressoVIP = new IngressoVIP(codigo, valor, evento, valorAdicional);
-                    if (gestor.adicionar(novoIngressoVIP)) {
-                        console.log("Ingresso VIP cadastrado com sucesso!");
-                    } else {
-                        console.log("Erro: Ja existe um ingresso com esse codigo.");
-                    }
-                    break;
+            } else if (opcao == 2) {
+                codigo = prompt("Código do ingresso:")!;
+                nome_evento = prompt("Nome do evento:")!;
+                valor = Number(prompt("Valor do ingresso:"));
+                valor_adicional = Number(prompt("Valor adicional do VIP:"));
+                ingresso_vip = new IngressoVIP(codigo, valor, nome_evento, valor_adicional);
+                if (vetor.adicionar(ingresso_vip)) {
+                    alert("Ingresso VIP cadastrado!");
+                } else {
+                    alert("Já existe um ingresso com esse código.");
                 }
-                case 3: {
-                    const codigo = readline.question("Codigo do ingresso a consultar: ");
-                    const ingresso = gestor.obterIngresso(codigo);
-                    if (ingresso) {
-                        console.log("\n--- Dados do Ingresso ---");
-                        console.log(ingresso.exibirDados());
-                    } else {
-                        console.log("Ingresso nao encontrado.");
-                    }
-                    break;
+            } else if (opcao == 3) {
+                codigo = prompt("Código do ingresso:")!;
+                alert(vetor.exibirIngresso(codigo));
+            } else if (opcao == 4) {
+                lista = vetor.listar();
+                if (lista == "") {
+                    alert("Nenhum ingresso cadastrado.");
+                } else {
+                    alert(lista);
                 }
-                case 4: {
-                    console.log("\n--- Ingressos Cadastrados ---");
-                    console.log(gestor.listar());
-                    break;
+            } else if (opcao == 5) {
+                codigo = prompt("Código do ingresso:")!;
+                valor = Number(prompt("Novo valor:"));
+                if (vetor.alterarValor(codigo, valor)) {
+                    alert("Valor alterado!");
+                } else {
+                    alert("Ingresso não encontrado.");
                 }
-                case 5: {
-                    const codigo = readline.question("Codigo do ingresso a alterar: ");
-                    const novoValor = readline.questionFloat("Novo valor: ");
-
-                    if (gestor.alterarValor(codigo, novoValor)) {
-                        console.log("Valor alterado com sucesso!");
-                    } else {
-                        console.log("Erro: Ingresso nao encontrado.");
-                    }
-                    break;
+            } else if (opcao == 6) {
+                codigo = prompt("Código do ingresso:")!;
+                valor_adicional = Number(prompt("Novo valor adicional:"));
+                if (vetor.alterarValorAdicional(codigo, valor_adicional)) {
+                    alert("Valor adicional alterado!");
+                } else {
+                    alert("Ingresso não encontrado ou não é VIP.");
                 }
-                case 6: {
-                    const codigo = readline.question("Codigo do ingresso VIP a alterar: ");
-                    const novoAdicional = readline.questionFloat("Novo valor adicional: ");
-
-                    if (gestor.alterarValorAdicional(codigo, novoAdicional)) {
-                        console.log("Valor adicional alterado com sucesso!");
-                    } else {
-                        console.log("Erro: Ingresso nao encontrado ou nao e do tipo VIP.");
-                    }
-                    break;
+            } else if (opcao == 7) {
+                codigo = prompt("Código do ingresso:")!;
+                if (vetor.remover(codigo)) {
+                    alert("Ingresso removido!");
+                } else {
+                    alert("Ingresso não encontrado.");
                 }
-                case 7: {
-                    const codigo = readline.question("Codigo do ingresso a remover: ");
-                    if (gestor.remover(codigo)) {
-                        console.log("Ingresso removido com sucesso!");
-                    } else {
-                        console.log("Erro: Ingresso nao encontrado.");
-                    }
-                    break;
-                }
-                case 8: {
-                    console.log("Programa encerrado.");
-                    break;
-                }
-                default: {
-                    console.log("Opcao invalida. Tente novamente.");
-                    break;
-                }
+            } else if (opcao == 8) {
+                alert("Programa encerrado.");
+            } else {
+                alert("Opção inválida.");
             }
-        } while (opcao !== 8);
+        }
     }
 }
 
-// Execução do método main
 IngressosTest.main();

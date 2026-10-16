@@ -8,23 +8,25 @@ export class IngressoVIP extends Ingresso {
         this.valorAdicional = valorAdicional;
     }
 
-    public getValorAdicional(): number {
+    getValorAdicional(): number {
         return this.valorAdicional;
     }
 
-    public setValorAdicional(valorAdicional: number): void {
+    setValorAdicional(valorAdicional: number): void {
         this.valorAdicional = valorAdicional;
     }
 
-    public calcularValor(): number {
-        let total: number;
-        total = this.getValor() + this.valorAdicional;
-        return total;
+    calcularValor(): number {
+        return this.getValor() + this.valorAdicional;
     }
 
-    public override exibirDados(): string {
+    exibirDados(): string {
         let resultado: string;
-        resultado = `Código: ${this.getCodigo()} | Evento: ${this.getNomeEvento()} | Valor Original: R$ ${this.getValor().toFixed(2)} | Valor Adicional: R$ ${this.valorAdicional.toFixed(2)} | Valor Total: R$ ${this.calcularValor().toFixed(2)}`;
+        resultado = `Código: ${this.getCodigo()} | 
+        Evento: ${this.getNomeEvento()} | 
+        Valor Original: R$ ${this.getValor().toFixed(2)} | 
+        Valor Adicional: R$ ${this.valorAdicional.toFixed(2)} | 
+        Valor Total: R$ ${this.calcularValor().toFixed(2)}`;
         return resultado;
     }
 }

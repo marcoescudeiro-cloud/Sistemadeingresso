@@ -2,99 +2,82 @@ import { Ingresso } from "./Ingresso";
 import { IngressoVIP } from "./IngressoVIP";
 
 export class VetorIngressos {
-    private ingressos: Ingresso[];
+    private ingressos: Ingresso[] = [];
 
-    constructor() {
-        this.ingressos = [];
+    adicionar(ingresso: Ingresso): boolean {
+        let posicao: number;
+        let adicionado: boolean = false;
+        posicao = this.localizar(ingresso.getCodigo());
+        if (posicao == -1) {
+            this.ingressos.push(ingresso);
+            adicionado = true;
+        }
+        return adicionado;
     }
 
-    public localizar(codigo: string): number {
-        let posicao: number=-1;
+    listar(): string {
+        let resultado: string = "";
+        let i: number;
+        for (i = 0; i < this.ingressos.length; i++) {
+            resultado += this.ingressos[i].exibirDados() + "\n";
+        }
+        return resultado;
+    }
+
+    localizar(codigo: string): number {
+        let posicao: number = -1;
         let i: number = 0;
-        while (i < this.ingressos.length && posicao === -1) {
-            if (this.ingressos[i].getCodigo() === codigo) {
+        while (i < this.ingressos.length && posicao == -1) {
+            if (this.ingressos[i].getCodigo() == codigo) {
                 posicao = i;
             }
-            i++;            
+            i++;
         }
         return posicao;
     }
 
-    public adicionar(ingresso: Ingresso): boolean {
+    exibirIngresso(codigo: string): string {
         let posicao: number;
-        let resultado : boolean = false;
-        posicao = this.localizar(ingresso.getCodigo());
-        if (posicao === -1) {
-             this.ingressos.push(ingresso);
-             resultado = true;
-        }
-        return resultado;
-    }           
-    
-    public listar(): string {
-        let resultado: string;
-        if (this.ingressos.length === 0) {
-            resultado = "Nenhum ingresso cadastrado.";
-        } else {
-            resultado = "";
-            for (const ingresso of this.ingressos) {
-                resultado += ingresso.exibirDados() + "\n";
-            }
+        let resultado: string = "Ingresso não encontrado.";
+        posicao = this.localizar(codigo);
+        if (posicao != -1) {
+            resultado = this.ingressos[posicao].exibirDados();
         }
         return resultado;
     }
 
-    public listarTodos(): string {
-        let resultado = "";
-        if (this.ingressos.length === 0) {
-            resultado = "Nenhum ingresso cadastrado.";
-        }
-        resultado = "";
-        for (const ingresso of this.ingressos) {
-            resultado += ingresso.exibirDados() + "\n";
-        }
-        return resultado;
-    }
-
-    public remover(codigo: string): boolean {
-        const posicao = this.localizar(codigo);
+    remover(codigo: string): boolean {
+        let posicao: number;
         let removido: boolean = false;
-        if (posicao !== -1) {
+        posicao = this.localizar(codigo);
+        if (posicao != -1) {
             this.ingressos.splice(posicao, 1);
             removido = true;
         }
         return removido;
     }
 
-    public alterarValor(codigo: string, valor: number): boolean {
-        const posicao = this.localizar(codigo);
+    alterarValor(codigo: string, valor: number): boolean {
+        let posicao: number;
         let alterado: boolean = false;
-        if (posicao !== -1) {
+        posicao = this.localizar(codigo);
+        if (posicao != -1) {
             this.ingressos[posicao].setValor(valor);
             alterado = true;
         }
         return alterado;
     }
 
-    public alterarValorAdicional(codigo: string, valorAdicional: number): boolean {
+    alterarValorAdicional(codigo: string, valor_adicional: number): boolean {
         let posicao: number;
         let alterado: boolean = false;
         posicao = this.localizar(codigo);
-        if (posicao !== -1 && this.ingressos[posicao] instanceof IngressoVIP) {
+        if (posicao != -1 && this.ingressos[posicao] instanceof IngressoVIP) {
             let ingresso_vip: IngressoVIP;
             ingresso_vip = this.ingressos[posicao] as IngressoVIP;
-            ingresso_vip.setValorAdicional(valorAdicional);
+            ingresso_vip.setValorAdicional(valor_adicional);
             alterado = true;
         }
         return alterado;
-    }
-
-    public obterIngresso(codigo: string): Ingresso | null {
-        const posicao = this.localizar(codigo);
-        let resultado: Ingresso | null = null;
-        if (posicao !== -1) {
-            resultado = this.ingressos[posicao];
-        }
-        return resultado;
     }
 }
